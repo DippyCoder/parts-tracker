@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Parts Cost Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="topbar">
+      <h1>Project Parts Cost Tracker</h1>
+      <button class="btn" id="newProjectBtn">+ New Project</button>
+    </header>
+
+    <div id="projectsArea"></div>
+  </div>
+
+  <dialog id="projectDialog">
+    <div class="dialog-body">
+      <h2 id="projectDialogTitle">New Project</h2>
+      <form id="projectForm">
+        <input type="hidden" id="projectId" />
+        <div class="field">
+          <label for="projectName">Name <span class="req">*</span></label>
+          <input type="text" id="projectName" required />
+        </div>
+        <div class="field">
+          <label for="projectDescription">Description</label>
+          <textarea id="projectDescription" rows="3"></textarea>
+        </div>
+        <div class="dialog-actions">
+          <button type="button" class="btn secondary" id="cancelProjectBtn">Cancel</button>
+          <button type="submit" class="btn">Save</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <script src="storage.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

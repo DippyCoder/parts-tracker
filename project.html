@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project - Parts Cost Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">&larr; All projects</a>
+
+    <header class="topbar">
+      <h1 id="projectName">Loading...</h1>
+      <div>
+        <button class="btn secondary" id="editProjectBtn">Edit</button>
+        <button class="btn" id="addPartBtn">+ Add Part</button>
+      </div>
+    </header>
+    <p class="project-desc" id="projectDescription"></p>
+
+    <div class="summary">
+      <div class="stat">
+        <div class="label">Parts</div>
+        <div class="value" id="statParts">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">Total Price</div>
+        <div class="value" id="statTotal">$0.00</div>
+      </div>
+      <div class="stat needed">
+        <div class="label">Needed Price</div>
+        <div class="value" id="statNeeded">$0.00</div>
+      </div>
+      <div class="stat savings">
+        <div class="label">Savings</div>
+        <div class="value" id="statSavings">$0.00</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <h2>Parts</h2>
+    </div>
+
+    <div id="partsArea"></div>
+  </div>
+
+  <dialog id="projectDialog">
+    <div class="dialog-body">
+      <h2>Edit Project</h2>
+      <form id="projectForm">
+        <div class="field">
+          <label for="projectNameInput">Name <span class="req">*</span></label>
+          <input type="text" id="projectNameInput" required />
+        </div>
+        <div class="field">
+          <label for="projectDescriptionInput">Description</label>
+          <textarea id="projectDescriptionInput" rows="3"></textarea>
+        </div>
+        <div class="dialog-actions">
+          <button type="button" class="btn secondary" id="cancelProjectBtn">Cancel</button>
+          <button type="submit" class="btn">Save</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog id="partDialog">
+    <div class="dialog-body">
+      <h2 id="partDialogTitle">Add Part</h2>
+      <form id="partForm">
+        <input type="hidden" id="partId" />
+        <div class="field">
+          <label for="partName">Name <span class="req">*</span></label>
+          <input type="text" id="partName" required />
+        </div>
+        <div class="field">
+          <label for="partDescription">Description</label>
+          <textarea id="partDescription" rows="2"></textarea>
+        </div>
+        <div class="field">
+          <label for="partPurchaseUrl">Purchase URL <span class="req">*</span></label>
+          <input type="url" id="partPurchaseUrl" placeholder="https://..." required />
+        </div>
+        <div class="field">
+          <label for="partAltUrl">Alternative URL</label>
+          <input type="url" id="partAltUrl" placeholder="https://..." />
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="partFullPrice">Full Price (cheapest) <span class="req">*</span></label>
+            <input type="number" id="partFullPrice" step="0.01" min="0" required />
+          </div>
+          <div class="field">
+            <label for="partNeededPrice">Needed Qty Price (cheapest)</label>
+            <input type="number" id="partNeededPrice" step="0.01" min="0" />
+          </div>
+        </div>
+        <div class="field-hint" style="margin-top:-8px; margin-bottom:14px;">
+          E.g. a pack of 10 cables costs $12 (full price), but you only need 1 and found one sold
+          individually for $2 (needed qty price) &mdash; that cheaper option is used in totals when set.
+        </div>
+        <div class="field">
+          <label for="partQuantity">Quantity</label>
+          <input type="number" id="partQuantity" step="1" min="1" value="1" />
+        </div>
+        <div class="dialog-actions">
+          <button type="button" class="btn secondary" id="cancelPartBtn">Cancel</button>
+          <button type="submit" class="btn">Save Part</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <script src="storage.js"></script>
+  <script src="project.js"></script>
+</body>
+</html>
