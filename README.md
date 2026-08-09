@@ -19,6 +19,10 @@ A small static web app for tracking the parts and cost of your projects.
 - The project view shows global **Total Price** (sum of full prices) and
   **Needed Price** (sum of resolved totals, preferring the cheaper needed
   price), plus the savings between them.
+- **Import / Export as JSON**: export all projects (or a single one) from
+  the project list, or export just the current project from its page.
+  Import accepts either file — imported projects are always added as new
+  entries (with fresh ids), so importing never overwrites existing data.
 
 \* required field
 

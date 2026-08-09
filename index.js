@@ -32,6 +32,42 @@ projectForm.addEventListener("submit", (e) => {
   render();
 });
 
+document.getElementById("exportAllBtn").addEventListener("click", () => {
+  const data = exportProjectsData();
+  if (data.projects.length === 0) {
+    alert("No projects to export yet.");
+    return;
+  }
+  downloadJson("projects-export.json", data);
+});
+
+const importFileInput = document.getElementById("importFileInput");
+
+document.getElementById("importBtn").addEventListener("click", () => {
+  importFileInput.click();
+});
+
+importFileInput.addEventListener("change", async () => {
+  const file = importFileInput.files[0];
+  if (!file) return;
+
+  try {
+    const parsed = JSON.parse(await file.text());
+    const { projectCount, partCount } = importProjectsData(parsed);
+    if (projectCount === 0) {
+      alert("No valid projects found in that file.");
+    } else {
+      alert(`Imported ${projectCount} project${projectCount === 1 ? "" : "s"} with ${partCount} part${partCount === 1 ? "" : "s"}.`);
+      render();
+    }
+  } catch (e) {
+    console.error(e);
+    alert("Couldn't import that file — make sure it's valid JSON exported from this app.");
+  } finally {
+    importFileInput.value = "";
+  }
+});
+
 function render() {
   const data = loadData();
   const projects = [...data.projects].sort((a, b) => b.createdAt - a.createdAt);
@@ -57,7 +93,10 @@ function render() {
     card.href = `project.html?id=${encodeURIComponent(project.id)}`;
 
     card.innerHTML = `
-      <button class="card-delete" title="Delete project" aria-label="Delete project">&times;</button>
+      <div class="card-toolbar">
+        <button class="card-export" title="Export project as JSON" aria-label="Export project as JSON">&darr;</button>
+        <button class="card-delete" title="Delete project" aria-label="Delete project">&times;</button>
+      </div>
       <h3>${escapeHtml(project.name)}</h3>
       <p class="desc">${escapeHtml(project.description || "")}</p>
       <div class="card-stats">
@@ -66,6 +105,12 @@ function render() {
         <span>Needed: <strong>${formatCurrency(totals.neededPrice)}</strong></span>
       </div>
     `;
+
+    card.querySelector(".card-export").addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      downloadJson(`${slugify(project.name)}-export.json`, exportProjectsData([project.id]));
+    });
 
     card.querySelector(".card-delete").addEventListener("click", (e) => {
       e.preventDefault();
@@ -81,6 +126,16 @@ function render() {
 
   projectsArea.innerHTML = "";
   projectsArea.appendChild(grid);
+}
+
+function slugify(str) {
+  return (
+    str
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "project"
+  );
 }
 
 function escapeHtml(str) {

@@ -126,6 +126,95 @@ function projectTotals(parts) {
   );
 }
 
+// Builds a self-contained JSON snapshot (each project nests its own parts)
+// for the given project ids, or all projects if none are given.
+function exportProjectsData(projectIds) {
+  const data = loadData();
+  const projects = projectIds
+    ? data.projects.filter((p) => projectIds.includes(p.id))
+    : data.projects;
+
+  return {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    projects: projects.map((project) => ({
+      name: project.name,
+      description: project.description,
+      parts: data.parts
+        .filter((part) => part.projectId === project.id)
+        .map((part) => ({
+          name: part.name,
+          description: part.description,
+          purchaseUrl: part.purchaseUrl,
+          altUrl: part.altUrl,
+          fullPrice: part.fullPrice,
+          neededPrice: part.neededPrice,
+          quantity: part.quantity,
+        })),
+    })),
+  };
+}
+
+// Accepts the shape produced by exportProjectsData (or a single project
+// object from that array). Always creates new projects/parts with fresh
+// ids, so importing never overwrites existing data.
+function importProjectsData(parsed) {
+  const incoming = Array.isArray(parsed) ? parsed : Array.isArray(parsed?.projects) ? parsed.projects : [parsed];
+
+  const data = loadData();
+  let projectCount = 0;
+  let partCount = 0;
+
+  for (const incomingProject of incoming) {
+    if (!incomingProject || typeof incomingProject.name !== "string") continue;
+
+    const project = {
+      id: uid(),
+      name: incomingProject.name.trim(),
+      description: (incomingProject.description || "").trim(),
+      createdAt: Date.now(),
+    };
+    data.projects.push(project);
+    projectCount++;
+
+    const parts = Array.isArray(incomingProject.parts) ? incomingProject.parts : [];
+    for (const incomingPart of parts) {
+      if (!incomingPart || typeof incomingPart.name !== "string" || typeof incomingPart.purchaseUrl !== "string") continue;
+
+      data.parts.push({
+        id: uid(),
+        projectId: project.id,
+        name: incomingPart.name.trim(),
+        description: (incomingPart.description || "").trim(),
+        purchaseUrl: incomingPart.purchaseUrl.trim(),
+        altUrl: (incomingPart.altUrl || "").trim(),
+        fullPrice: Number(incomingPart.fullPrice) || 0,
+        neededPrice:
+          incomingPart.neededPrice === null || incomingPart.neededPrice === undefined || incomingPart.neededPrice === ""
+            ? null
+            : Number(incomingPart.neededPrice),
+        quantity: Math.max(1, Number(incomingPart.quantity) || 1),
+      });
+      partCount++;
+    }
+  }
+
+  saveData(data);
+  return { projectCount, partCount };
+}
+
+function downloadJson(filename, data) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 function formatCurrency(value) {
   const n = Number(value) || 0;
   return "$" + n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });

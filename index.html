@@ -10,7 +10,12 @@
   <div class="container">
     <header class="topbar">
       <h1>Project Parts Cost Tracker</h1>
-      <button class="btn" id="newProjectBtn">+ New Project</button>
+      <div>
+        <button class="btn secondary" id="exportAllBtn">Export JSON</button>
+        <button class="btn secondary" id="importBtn">Import JSON</button>
+        <input type="file" id="importFileInput" accept="application/json" hidden />
+        <button class="btn" id="newProjectBtn">+ New Project</button>
+      </div>
     </header>
 
     <div id="projectsArea"></div>

@@ -30,6 +30,12 @@ const partFullPriceInput = document.getElementById("partFullPrice");
 const partNeededPriceInput = document.getElementById("partNeededPrice");
 const partQuantityInput = document.getElementById("partQuantity");
 
+document.getElementById("exportProjectBtn").addEventListener("click", () => {
+  const project = getProject(projectId);
+  const slug = project.name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "project";
+  downloadJson(`${slug}-export.json`, exportProjectsData([projectId]));
+});
+
 document.getElementById("editProjectBtn").addEventListener("click", () => {
   const project = getProject(projectId);
   projectNameInput.value = project.name;

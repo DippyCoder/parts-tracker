@@ -153,10 +153,16 @@ header.topbar {
   color: var(--text);
 }
 
-.card .card-delete {
+.card .card-toolbar {
   position: absolute;
   top: 10px;
   right: 10px;
+  display: flex;
+  gap: 2px;
+}
+
+.card .card-export,
+.card .card-delete {
   background: transparent;
   border: none;
   color: var(--text-dim);
@@ -165,6 +171,10 @@ header.topbar {
   line-height: 1;
   padding: 4px 6px;
   border-radius: 6px;
+}
+.card .card-export:hover {
+  color: var(--accent);
+  background: rgba(91, 140, 255, 0.1);
 }
 .card .card-delete:hover {
   color: var(--bad);
