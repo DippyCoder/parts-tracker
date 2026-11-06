@@ -33,6 +33,10 @@
         <div class="label">Needed Price</div>
         <div class="value" id="statNeeded">$0.00</div>
       </div>
+      <div class="stat remaining">
+        <div class="label">Remaining to Buy</div>
+        <div class="value" id="statRemaining">$0.00</div>
+      </div>
       <div class="stat savings">
         <div class="label">Savings</div>
         <div class="value" id="statSavings">$0.00</div>
@@ -104,6 +108,16 @@
         <div class="field">
           <label for="partQuantity">Quantity</label>
           <input type="number" id="partQuantity" step="1" min="1" value="1" />
+        </div>
+        <div class="field checkbox-row">
+          <label class="checkbox">
+            <input type="checkbox" id="partOptional" />
+            <span>Optional</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="partBought" />
+            <span>Already bought</span>
+          </label>
         </div>
         <div class="dialog-actions">
           <button type="button" class="btn secondary" id="cancelPartBtn">Cancel</button>

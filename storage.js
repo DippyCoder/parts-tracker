@@ -11,12 +11,17 @@ function loadData() {
     const data = JSON.parse(raw);
     return {
       projects: Array.isArray(data.projects) ? data.projects : [],
-      parts: Array.isArray(data.parts) ? data.parts : [],
+      parts: Array.isArray(data.parts) ? data.parts.map(normalizePart) : [],
     };
   } catch (e) {
     console.error("Failed to load data", e);
     return { projects: [], parts: [] };
   }
+}
+
+// Older saved data predates the optional/bought flags; default them to false.
+function normalizePart(part) {
+  return { ...part, optional: Boolean(part.optional), bought: Boolean(part.bought) };
 }
 
 function saveData(data) {
@@ -73,6 +78,8 @@ function createPart(projectId, fields) {
     fullPrice: fields.fullPrice,
     neededPrice: fields.neededPrice,
     quantity: fields.quantity,
+    optional: Boolean(fields.optional),
+    bought: Boolean(fields.bought),
   };
   data.parts.push(part);
   saveData(data);
@@ -90,6 +97,8 @@ function updatePart(id, fields) {
   part.fullPrice = fields.fullPrice;
   part.neededPrice = fields.neededPrice;
   part.quantity = fields.quantity;
+  part.optional = Boolean(fields.optional);
+  part.bought = Boolean(fields.bought);
   saveData(data);
   return part;
 }
@@ -120,9 +129,10 @@ function projectTotals(parts) {
       const t = partTotals(part);
       acc.totalPrice += t.fullTotal;
       acc.neededPrice += t.neededTotal;
+      if (!part.bought) acc.remainingPrice += t.neededTotal;
       return acc;
     },
-    { totalPrice: 0, neededPrice: 0 }
+    { totalPrice: 0, neededPrice: 0, remainingPrice: 0 }
   );
 }
 
@@ -150,6 +160,8 @@ function exportProjectsData(projectIds) {
           fullPrice: part.fullPrice,
           neededPrice: part.neededPrice,
           quantity: part.quantity,
+          optional: Boolean(part.optional),
+          bought: Boolean(part.bought),
         })),
     })),
   };
@@ -194,6 +206,8 @@ function importProjectsData(parsed) {
             ? null
             : Number(incomingPart.neededPrice),
         quantity: Math.max(1, Number(incomingPart.quantity) || 1),
+        optional: Boolean(incomingPart.optional),
+        bought: Boolean(incomingPart.bought),
       });
       partCount++;
     }

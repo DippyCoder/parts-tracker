@@ -363,3 +363,52 @@ dialog::backdrop {
   margin: 0;
   font-size: 1.05rem;
 }
+
+.checkbox-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.field label.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-bottom: 0;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.field label.checkbox input {
+  margin: 0;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+
+.tags {
+  display: inline-flex;
+  gap: 4px;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.tag.bought {
+  color: var(--good);
+  border-color: rgba(76, 208, 125, 0.4);
+}
+
+tr.is-bought td {
+  opacity: 0.6;
+}

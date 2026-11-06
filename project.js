@@ -12,6 +12,7 @@ const statParts = document.getElementById("statParts");
 const statTotal = document.getElementById("statTotal");
 const statNeeded = document.getElementById("statNeeded");
 const statSavings = document.getElementById("statSavings");
+const statRemaining = document.getElementById("statRemaining");
 
 const projectDialog = document.getElementById("projectDialog");
 const projectForm = document.getElementById("projectForm");
@@ -29,6 +30,8 @@ const partAltUrlInput = document.getElementById("partAltUrl");
 const partFullPriceInput = document.getElementById("partFullPrice");
 const partNeededPriceInput = document.getElementById("partNeededPrice");
 const partQuantityInput = document.getElementById("partQuantity");
+const partOptionalInput = document.getElementById("partOptional");
+const partBoughtInput = document.getElementById("partBought");
 
 document.getElementById("exportProjectBtn").addEventListener("click", () => {
   const project = getProject(projectId);
@@ -75,6 +78,8 @@ function openPartDialog(part) {
     partFullPriceInput.value = part.fullPrice;
     partNeededPriceInput.value = part.neededPrice ?? "";
     partQuantityInput.value = part.quantity;
+    partOptionalInput.checked = Boolean(part.optional);
+    partBoughtInput.checked = Boolean(part.bought);
   } else {
     partDialogTitle.textContent = "Add Part";
     partIdInput.value = "";
@@ -101,6 +106,8 @@ partForm.addEventListener("submit", (e) => {
     fullPrice: Number(fullPrice),
     neededPrice: neededPriceRaw === "" ? null : Number(neededPriceRaw),
     quantity: Math.max(1, Number(partQuantityInput.value) || 1),
+    optional: partOptionalInput.checked,
+    bought: partBoughtInput.checked,
   };
 
   const id = partIdInput.value;
@@ -131,6 +138,7 @@ function render() {
   statTotal.textContent = formatCurrency(totals.totalPrice);
   statNeeded.textContent = formatCurrency(totals.neededPrice);
   statSavings.textContent = formatCurrency(totals.totalPrice - totals.neededPrice);
+  statRemaining.textContent = formatCurrency(totals.remainingPrice);
 
   if (parts.length === 0) {
     partsArea.innerHTML = `
@@ -166,10 +174,15 @@ function render() {
   for (const part of parts) {
     const t = partTotals(part);
     const tr = document.createElement("tr");
+    if (part.bought) tr.classList.add("is-bought");
+    const tags = [
+      part.optional ? `<span class="tag optional">Optional</span>` : "",
+      part.bought ? `<span class="tag bought">Bought</span>` : "",
+    ].join("");
 
     tr.innerHTML = `
       <td>
-        <div class="part-name">${escapeHtml(part.name)}</div>
+        <div class="part-name">${escapeHtml(part.name)}${tags ? ` <span class="tags">${tags}</span>` : ""}</div>
         ${part.description ? `<div class="part-desc">${escapeHtml(part.description)}</div>` : ""}
       </td>
       <td>${part.quantity}</td>
