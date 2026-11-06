@@ -136,7 +136,7 @@ function render() {
 
   statParts.textContent = parts.length;
   statTotal.textContent = formatCurrency(totals.totalPrice);
-  statNeeded.textContent = formatCurrency(totals.neededPrice);
+  statNeeded.innerHTML = formatNeededPriceHtml(totals);
   statSavings.textContent = formatCurrency(totals.totalPrice - totals.neededPrice);
   statRemaining.textContent = formatCurrency(totals.remainingPrice);
 

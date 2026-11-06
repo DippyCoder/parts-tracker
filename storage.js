@@ -129,10 +129,12 @@ function projectTotals(parts) {
       const t = partTotals(part);
       acc.totalPrice += t.fullTotal;
       acc.neededPrice += t.neededTotal;
+      if (part.optional) acc.hasOptional = true;
+      else acc.requiredNeededPrice += t.neededTotal;
       if (!part.bought) acc.remainingPrice += t.neededTotal;
       return acc;
     },
-    { totalPrice: 0, neededPrice: 0, remainingPrice: 0 }
+    { totalPrice: 0, neededPrice: 0, requiredNeededPrice: 0, remainingPrice: 0, hasOptional: false }
   );
 }
 
@@ -227,6 +229,12 @@ function downloadJson(filename, data) {
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
+}
+
+// "required (with optional)" when the project has optional parts.
+function formatNeededPriceHtml(totals) {
+  if (!totals.hasOptional) return formatCurrency(totals.neededPrice);
+  return `${formatCurrency(totals.requiredNeededPrice)} <span class="price-optional">(${formatCurrency(totals.neededPrice)})</span>`;
 }
 
 function formatCurrency(value) {

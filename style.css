@@ -412,3 +412,12 @@ dialog::backdrop {
 tr.is-bought td {
   opacity: 0.6;
 }
+
+.price-optional {
+  font-size: 0.6em;
+  font-weight: 500;
+  color: var(--text-dim);
+}
+.card .price-optional {
+  font-size: 1em;
+}

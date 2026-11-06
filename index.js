@@ -102,7 +102,7 @@ function render() {
       <div class="card-stats">
         <span>${parts.length} part${parts.length === 1 ? "" : "s"}</span>
         <span>Total: <strong>${formatCurrency(totals.totalPrice)}</strong></span>
-        <span>Needed: <strong>${formatCurrency(totals.neededPrice)}</strong></span>
+        <span>Needed: <strong>${formatNeededPriceHtml(totals)}</strong></span>
       </div>
     `;
 
