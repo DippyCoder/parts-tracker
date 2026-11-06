@@ -17,7 +17,7 @@ A small static web app for tracking the parts and cost of your projects.
   - Optional / Already bought — checkboxes shown as tags in the parts list.
     Bought parts are dimmed and excluded from **Remaining to Buy**. Data
     saved or exported before these existed loads with both unchecked.
-    When a project has optional parts, Needed Price is shown as
+    When a project has optional parts, Total Price and Needed Price are shown as
     `without optional (with optional)`.
 - Each part's **total** uses the needed quantity price when set, otherwise it
   falls back to the full price.

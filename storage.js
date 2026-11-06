@@ -130,11 +130,14 @@ function projectTotals(parts) {
       acc.totalPrice += t.fullTotal;
       acc.neededPrice += t.neededTotal;
       if (part.optional) acc.hasOptional = true;
-      else acc.requiredNeededPrice += t.neededTotal;
+      else {
+        acc.requiredTotalPrice += t.fullTotal;
+        acc.requiredNeededPrice += t.neededTotal;
+      }
       if (!part.bought) acc.remainingPrice += t.neededTotal;
       return acc;
     },
-    { totalPrice: 0, neededPrice: 0, requiredNeededPrice: 0, remainingPrice: 0, hasOptional: false }
+    { totalPrice: 0, neededPrice: 0, requiredTotalPrice: 0, requiredNeededPrice: 0, remainingPrice: 0, hasOptional: false }
   );
 }
 
@@ -232,9 +235,17 @@ function downloadJson(filename, data) {
 }
 
 // "required (with optional)" when the project has optional parts.
+function formatWithOptionalHtml(totals, required, all) {
+  if (!totals.hasOptional) return formatCurrency(all);
+  return `${formatCurrency(required)} <span class="price-optional">(${formatCurrency(all)})</span>`;
+}
+
+function formatTotalPriceHtml(totals) {
+  return formatWithOptionalHtml(totals, totals.requiredTotalPrice, totals.totalPrice);
+}
+
 function formatNeededPriceHtml(totals) {
-  if (!totals.hasOptional) return formatCurrency(totals.neededPrice);
-  return `${formatCurrency(totals.requiredNeededPrice)} <span class="price-optional">(${formatCurrency(totals.neededPrice)})</span>`;
+  return formatWithOptionalHtml(totals, totals.requiredNeededPrice, totals.neededPrice);
 }
 
 function formatCurrency(value) {

@@ -105,7 +105,7 @@ function render() {
       <p class="desc">${escapeHtml(project.description || "")}</p>
       <div class="card-stats">
         <span>${parts.length} part${parts.length === 1 ? "" : "s"}</span>
-        <span>Total: <strong>${formatCurrency(totals.totalPrice)}</strong></span>
+        <span>Total: <strong>${formatTotalPriceHtml(totals)}</strong></span>
         <span>Needed: <strong>${formatNeededPriceHtml(totals)}</strong></span>
       </div>
     `;

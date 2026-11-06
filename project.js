@@ -135,7 +135,7 @@ function render() {
   const totals = projectTotals(parts);
 
   statParts.textContent = parts.length;
-  statTotal.textContent = formatCurrency(totals.totalPrice);
+  statTotal.innerHTML = formatTotalPriceHtml(totals);
   statNeeded.innerHTML = formatNeededPriceHtml(totals);
   statSavings.textContent = formatCurrency(totals.totalPrice - totals.neededPrice);
   statRemaining.textContent = formatCurrency(totals.remainingPrice);
