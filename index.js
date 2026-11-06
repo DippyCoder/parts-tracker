@@ -51,21 +51,25 @@ importFileInput.addEventListener("change", async () => {
   const file = importFileInput.files[0];
   if (!file) return;
 
+  let result;
   try {
-    const parsed = JSON.parse(await file.text());
-    const { projectCount, partCount } = importProjectsData(parsed);
-    if (projectCount === 0) {
-      alert("No valid projects found in that file.");
-    } else {
-      alert(`Imported ${projectCount} project${projectCount === 1 ? "" : "s"} with ${partCount} part${partCount === 1 ? "" : "s"}.`);
-      render();
-    }
+    const text = (await file.text()).replace(/^\uFEFF/, "");
+    result = importProjectsData(JSON.parse(text));
   } catch (e) {
     console.error(e);
-    alert("Couldn't import that file — make sure it's valid JSON exported from this app.");
+    alert(`Couldn't import that file: ${e.message}`);
+    return;
   } finally {
     importFileInput.value = "";
   }
+
+  const { projectCount, partCount } = result;
+  if (projectCount === 0) {
+    alert("No valid projects found in that file.");
+    return;
+  }
+  alert(`Imported ${projectCount} project${projectCount === 1 ? "" : "s"} with ${partCount} part${partCount === 1 ? "" : "s"}.`);
+  render();
 });
 
 function render() {

@@ -10,8 +10,8 @@ function loadData() {
     if (!raw) return { projects: [], parts: [] };
     const data = JSON.parse(raw);
     return {
-      projects: Array.isArray(data.projects) ? data.projects : [],
-      parts: Array.isArray(data.parts) ? data.parts.map(normalizePart) : [],
+      projects: Array.isArray(data.projects) ? data.projects.filter((p) => p && typeof p === "object") : [],
+      parts: Array.isArray(data.parts) ? data.parts.filter((p) => p && typeof p === "object").map(normalizePart) : [],
     };
   } catch (e) {
     console.error("Failed to load data", e);

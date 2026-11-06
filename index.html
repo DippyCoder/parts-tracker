@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project Parts Cost Tracker</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=3" />
 </head>
 <body>
   <div class="container">
@@ -13,7 +13,7 @@
       <div>
         <button class="btn secondary" id="exportAllBtn">Export JSON</button>
         <button class="btn secondary" id="importBtn">Import JSON</button>
-        <input type="file" id="importFileInput" accept="application/json" hidden />
+        <input type="file" id="importFileInput" accept=".json,application/json" hidden />
         <button class="btn" id="newProjectBtn">+ New Project</button>
       </div>
     </header>
@@ -42,7 +42,7 @@
     </div>
   </dialog>
 
-  <script src="storage.js"></script>
-  <script src="index.js"></script>
+  <script src="storage.js?v=3"></script>
+  <script src="index.js?v=3"></script>
 </body>
 </html>
